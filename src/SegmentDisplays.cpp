@@ -4,6 +4,9 @@
 
 #include "SegmentDisplays.h"
 
+/**
+ * Enable the correct pins
+ */
 void enableDisplays() {
     // Display
     pinMode(segA, OUTPUT);
@@ -18,36 +21,6 @@ void enableDisplays() {
     pinMode(gnd1, OUTPUT);
 }
 
-void resetDisplays() {
-    delay(5);
-    selectDisplay(0);
-    writeDisplay(-2);
-    delay(5);
-    selectDisplay(1);
-    writeDisplay(-2);
-}
-
-/**
- * Show a number on the 7-segment displays
- * Takes 10 ms
- * @param value the number to show
- */
-void writeDisplays(int value) {
-    delay(5);
-
-    selectDisplay(0);
-    int dec = value / 10;
-    if (dec == 0) {
-        writeDisplay(-1);
-    } else {
-        writeDisplay(dec);
-    }
-
-    delay(5);
-    selectDisplay(1);
-    writeDisplay(value % 10);
-}
-
 /**
  * Select a display to write to
  * @param display the display to write to
@@ -57,13 +30,40 @@ void selectDisplay(int display) {
     writeDisplay(-1);
     // Set to display 0
     if (display == 0) {
-        digitalWrite(0, LOW);
-        digitalWrite(1, HIGH);
+        digitalWrite(gnd0, LOW);
+        digitalWrite(gnd1, HIGH);
     // Set to display 1
     } else {
-        digitalWrite(1, LOW);
-        digitalWrite(0, HIGH);
+        digitalWrite(gnd0, HIGH);
+        digitalWrite(gnd1, LOW);
     }
+}
+
+/**
+ * Show a number on the 7-segment displays
+ * Takes 10 ms
+ * @param number the number to show
+ */
+void writeDisplays(int number) {
+    // Frame rate of 1000/5 = 200hz
+    delay(5);
+    // Select first display
+    selectDisplay(0);
+    // Calculate first digit
+    int dec = number / 10;
+    // Don't show anything if it's 0
+    if (dec == 0) {
+        writeDisplay(-1);
+    // Show the digit
+    } else {
+        writeDisplay(dec);
+    }
+    // Frame rate of 1000/5 = 200hz
+    delay(5);
+    // Select second display
+    selectDisplay(1);
+    // Print second digit
+    writeDisplay(number % 10);
 }
 
 /**
@@ -172,4 +172,26 @@ void writeDisplay(int value) {
         digitalWrite(segF, HIGH);
         digitalWrite(segG, HIGH);
     }
+}
+
+/**
+ * Set displays to default stand
+ */
+void resetDisplays() {
+    // Enable both displays
+    digitalWrite(gnd0, LOW);
+    digitalWrite(gnd1, LOW);
+    // Write middle line
+    writeDisplay(-2);
+}
+
+/**
+ * Set displays to empty
+ */
+void emptyDisplays() {
+    // Enable both displays
+    digitalWrite(gnd1, LOW);
+    digitalWrite(gnd0, LOW);
+    // Make displays empty
+    writeDisplay(-1);
 }

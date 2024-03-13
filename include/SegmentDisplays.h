@@ -17,8 +17,11 @@ static int gnd0 = 0;
 static int gnd1 = 1;
 
 void enableDisplays();
-void resetDisplays();
-void writeDisplays(int value);
+
 void selectDisplay(int display);
+void writeDisplays(int number);
 void writeDisplay(int digit);
+
+void resetDisplays();
+void emptyDisplays();
 

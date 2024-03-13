@@ -37,12 +37,12 @@ void setup() {
 
 void loop()
 {
+    // count down using milliseconds
     if (count > 10) {
-        // count down using milliseconds
         writeDisplays((int) count / 1000);
         count -= 10;
+    // print avg sonar distance to screens
     } else if (count == -1) {
-        // print avg sonar distance to screens
         if (amount == 5) {
             avg = total / amount;
             amount = 0;
@@ -62,10 +62,10 @@ void loop()
             digitalWrite(pwmA, LOW);
             digitalWrite(pwmB, LOW);
         }
+    // Stop countdown
     } else {
         count = -1;
         resetDisplays();
-        delay(1000);
     }
 }
 
