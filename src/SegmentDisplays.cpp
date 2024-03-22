@@ -4,6 +4,10 @@
 
 #include "SegmentDisplays.h"
 
+void counter() {
+
+}
+
 /**
  * Enable the correct pins
  */
@@ -46,7 +50,7 @@ void selectDisplay(int display) {
  */
 void writeDisplays(int number) {
     // Frame rate of 1000/5 = 200hz
-    delay(5);
+    delay(2);
     // Select first display
     selectDisplay(0);
     // Calculate first digit
@@ -59,11 +63,77 @@ void writeDisplays(int number) {
         writeDisplay(dec);
     }
     // Frame rate of 1000/5 = 200hz
-    delay(5);
+    delay(2);
     // Select second display
     selectDisplay(1);
     // Print second digit
     writeDisplay(number % 10);
+}
+
+void writeDisplays(const String& string) {
+    // Frame rate of 1000/5 = 200hz
+    delay(5);
+    // Select first display
+    selectDisplay(0);
+    // Print first character
+    writeDisplay(string.charAt(0));
+    // Frame rate of 1000/5 = 200hz
+    delay(5);
+    // Select second display
+    selectDisplay(1);
+    // Print second character
+    writeDisplay(string.charAt(1));
+}
+
+void writeDisplay(char character) {
+    switch (character) {
+        case 's': {
+            digitalWrite(segA, HIGH);
+            digitalWrite(segB, LOW);
+            digitalWrite(segC, HIGH);
+            digitalWrite(segD, HIGH);
+            digitalWrite(segE, LOW);
+            digitalWrite(segF, HIGH);
+            digitalWrite(segG, HIGH);
+            break;
+        } case 't': {
+            digitalWrite(segA, LOW);
+            digitalWrite(segB, LOW);
+            digitalWrite(segC, LOW);
+            digitalWrite(segD, HIGH);
+            digitalWrite(segE, HIGH);
+            digitalWrite(segF, HIGH);
+            digitalWrite(segG, HIGH);
+            break;
+        } case 'f': {
+            digitalWrite(segA, HIGH);
+            digitalWrite(segB, LOW);
+            digitalWrite(segC, LOW);
+            digitalWrite(segD, LOW);
+            digitalWrite(segE, HIGH);
+            digitalWrite(segF, HIGH);
+            digitalWrite(segG, HIGH);
+            break;
+        } case 'i': {
+            digitalWrite(segA, LOW);
+            digitalWrite(segB, LOW);
+            digitalWrite(segC, LOW);
+            digitalWrite(segD, LOW);
+            digitalWrite(segE, HIGH);
+            digitalWrite(segF, HIGH);
+            digitalWrite(segG, LOW);
+            break;
+        } default: {
+            digitalWrite(segA, LOW);
+            digitalWrite(segB, LOW);
+            digitalWrite(segC, LOW);
+            digitalWrite(segD, LOW);
+            digitalWrite(segE, LOW);
+            digitalWrite(segF, LOW);
+            digitalWrite(segG, HIGH);
+            break;
+        }
+    }
 }
 
 /**

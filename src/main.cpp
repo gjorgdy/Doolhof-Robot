@@ -2,70 +2,85 @@
 // Created by Gjorg on 13/03/2024.
 //
 
-#include <Arduino.h>
-#include "NewPing.h"
+//#include <Arduino.h>
 #include "SegmentDisplays.h"
+#include "lineSensor.h"
+#include "motorShield.h"
+#include "lineTracing.h"
 
-long count = 0 * 1000;
+long countdown = 2;
 
-int avg = 0;
-int amount = 0;
-int total = 0;
-// motor shield
-int dirA = 12;
-int dirB = 13;
-int pwmA = 3;
-int pwmB = 11;
+int state = 0;
 
-NewPing sonar(2, A5, 99);
+long startTime = 0;
+
+bool flickering = true;
+
+int getTime();
 
 void setup() {
-    // Sensors
-    pinMode(A0, INPUT_PULLUP);
-    pinMode(A1, INPUT_PULLUP);
-    pinMode(A2, INPUT_PULLUP);
-    pinMode(A3, INPUT_PULLUP);
-    pinMode(A4, INPUT_PULLUP);
-    // Enable 7-segments
+
+    TCCR2B = TCCR2B & (B11111000 | B00000111); // for PWM frequency of 30.64 Hz
+
     enableDisplays();
-    // Vroom
-    pinMode(dirA, OUTPUT);
-    pinMode(dirB, OUTPUT);
-    pinMode(pwmA, OUTPUT);
-    pinMode(pwmB, OUTPUT);
+    enableSensor();
+    enableMotors();
+    // Countdown
+//    Serial.begin(9600);
 }
 
-void loop()
-{
-    // count down using milliseconds
-    if (count > 10) {
-        writeDisplays((int) count / 1000);
-        count -= 10;
-    // print avg sonar distance to screens
-    } else if (count == -1) {
-        if (amount == 5) {
-            avg = total / amount;
-            amount = 0;
-            total = 0;
+void loop() {
+    // countdown state
+    if (state == 0 ) {
+        if (countdown != 0) {
+            for (int i = 0 ; i < 250 ; i++) {
+                writeDisplays((int) countdown);
+            }
+            Serial.println(countdown);
+            if (sensor(W, W, W, W, W) || sensor(W, W, B, W, W)) {
+                countdown -= 1;
+            }
         } else {
-            total += (int) sonar.ping_cm();
-            amount += 1;
+            writeDisplays("st");
+            startTime = (long) millis();
+            goStraight();
+            if (sensor(W, W, B, W, W) || sensor(W, W, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, B, W)) {
+                state = 1;
+            }
         }
-        writeDisplays(avg);
-        // drive forward if no obstacle seen
-        if (avg > 10) {
-            analogWrite(pwmA, 150);
-            analogWrite(pwmB, 150);
-            digitalWrite(dirA, LOW);
-            digitalWrite(dirB, HIGH);
+    // driving state
+    } else if (state == 1) {
+        if (drive()) {
+            state = 2;
+        }
+        writeDisplays(getTime());
+    // finish state
+    } else if (state == 2) {
+        // DO NOT DRIVE
+        stop();
+        // flicker
+        if (flickering) {
+            int time = getTime();
+            for (int i = 0; i < 6; i++) {
+                if (i % 2 == 0) {
+                    for (int j = 0; j < 125; j++) {
+                        writeDisplays(time);
+                    }
+                } else {
+                    emptyDisplays();
+                    delay(500);
+                }
+            }
+            flickering = false;
         } else {
-            digitalWrite(pwmA, LOW);
-            digitalWrite(pwmB, LOW);
+            writeDisplays("fi");
         }
-    // Stop countdown
-    } else {
-        count = -1;
-        resetDisplays();
+
     }
+
 }
 
+int getTime() {
+    long timeMs = (long) millis() - startTime;
+    return (int) (timeMs / 1000);
+}

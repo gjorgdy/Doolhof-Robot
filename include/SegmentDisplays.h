@@ -5,22 +5,24 @@
 #include <Arduino.h>
 
 // 7-segment
-static int segA = 10;
-static int segB = 9;
-static int segC = 8;
-static int segD = 7;
-static int segE = 6;
-static int segF = 5;
-static int segG = 4;
+#define segA 10
+#define segB 9
+#define segC 8
+#define segD 7
+#define segE 6
+#define segF 5
+#define segG 4
 
-static int gnd0 = 0;
-static int gnd1 = 1;
+#define gnd0 0
+#define gnd1 1
 
 void enableDisplays();
 
 void selectDisplay(int display);
 void writeDisplays(int number);
+void writeDisplays(const String& string);
 void writeDisplay(int digit);
+void writeDisplay(char character);
 
 void resetDisplays();
 void emptyDisplays();
