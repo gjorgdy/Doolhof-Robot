@@ -16,6 +16,7 @@
 #define sen3 A3
 #define sen4 A4
 
+void scan();
 bool sensor(bool, bool, bool, bool, bool);
 void enableSensor();
 

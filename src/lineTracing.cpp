@@ -23,7 +23,6 @@ unsigned long blacktime = 0;
 
 NewPing sonar(2, A5, 99);
 
-
 boolean drive() {
 
     long dist = (long) sonar.ping_cm();
