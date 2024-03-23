@@ -18,6 +18,7 @@
 
 void scan();
 bool sensor(bool, bool, bool, bool, bool);
+bool lastSensor(bool, bool, bool, bool, bool);
 void enableSensor();
 
 #endif //UNTITLED_LINESENSOR_H

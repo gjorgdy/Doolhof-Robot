@@ -10,7 +10,7 @@
 
 long countdown = 2;
 
-int state = 0;
+int state = 0; // set to -1 for debug
 
 long startTime = 0;
 
@@ -26,10 +26,21 @@ void setup() {
     enableSensor();
     enableMotors();
     // Countdown
-//    Serial.begin(9600);
+    if (state == -1) {
+        Serial.begin(9600);
+    }
 }
 
 void loop() {
+    // scan the lineSensors
+    scan();
+    // debug state
+    if (state == -1) {
+        Serial.println(lastSensor(B, B, B, W, W));
+        Serial.println(sensor(W, W, B, W, W));
+        Serial.println("");
+        delay(1000);
+    }
     // countdown state
     if (state == 0 ) {
         if (countdown != 0) {
@@ -50,6 +61,7 @@ void loop() {
         }
     // driving state
     } else if (state == 1) {
+        // returns true if finish is reached
         if (drive()) {
             state = 2;
         }

@@ -56,31 +56,32 @@ boolean drive() {
             objecttime = millis();
             objectstate = 1;
         }
-        Serial.println("turn");
-        turn();
+        Serial.println("fullTurn");
+        fullTurn();
 
     }  else if (sensor(W, W, B, B, B) || sensor(W, W, W, B, B) || sensor(W, W, W, W, B) || sensor(W, B, B, B, B) ) {
         if (turnstate == 0) {
             turntime = millis();
             turnstate = 1;
         }
-        Serial.println("turnLeft");
-        turnLeft();
+        Serial.println("turnRight");
+        turnRight();
     } else if (sensor(B, B, B, W, W) || sensor(B, B, W, W, W) || sensor(B, B, B, B, W) || sensor(B, W, W, W, W) ) {
         if (turnstate == 0) {
             turntime = millis();
             turnstate = 1;
         }
-        Serial.println("turnRight");
-        turnRight();
+        Serial.println("turnLeft");
+        turnLeft();
     } else if (sensor(B, B, B, B, B) || blackstate == 1) {
         if (blackstate == 0) {
             blacktime = millis();
             blackstate = 1;
         }
         Serial.println("win? " + String(finishCount));
+        goStraight();
 //        if (finishCount == 0) {
-            turnBlack();
+//        fullOuterTurn();
 //        } else
         if (finishCount < 16) {
 //            modTurnBlack();
@@ -92,7 +93,11 @@ boolean drive() {
     } else if (sensor(W, W, B, W, W)) {
         // drive code
         Serial.println("In middle");
-        goStraight();
+        if (lastSensor(B, B, B, B, B)) {
+            fullTurn();
+        } else {
+            goStraight();
+        }
     } else if (sensor(W, W, B, B, W) || sensor(W, W, W, B, W)) {
         Serial.println("slightRight");
         slightRight();
@@ -101,7 +106,7 @@ boolean drive() {
         slightLeft();
     } else if (sensor(W, W, W, W, W) || (dist != 0 && dist < 10)) {
         Serial.println("???");
-        turn();
+        fullTurn();
     }
     finishCount = 0;
     return false;

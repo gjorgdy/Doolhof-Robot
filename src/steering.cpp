@@ -2,7 +2,7 @@
 // Created by Gjorg on 22/03/2024.
 //
 
-#define leftLeaning true
+#define leftLeaning false
 
 #include "steering.h"
 
@@ -31,7 +31,7 @@ void turnLeft() {
     setRightMotor(baseSpeed + steerDelta, true); // leftleaning : true
 }
 
-void turnBlack() {
+void fullOuterTurn() {
     if (leftLeaning) {
         setLeftMotor(0, false);
         setRightMotor(baseSpeed, true);
@@ -41,16 +41,8 @@ void turnBlack() {
     }
 }
 
-void modTurnBlack() {
-    if (leftLeaning) {
-        modRightMotor(-1 * slightSteerDelta, true);
-    } else {
-        modLeftMotor(-1 * slightSteerDelta, true);
-    }
-}
-
-void turn() {
-    if (leftLeaning) {
+void fullTurn() {
+    if (leftLeaning || lastSensor(B, B, B, W, W)) {
         setLeftMotor(baseSpeed, true);
         setRightMotor(baseSpeed, false);
     } else {
