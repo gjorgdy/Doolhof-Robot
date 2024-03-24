@@ -16,7 +16,7 @@ long stateTime = 0; // time spent in current state
 
 long getTime();
 int getTimeSec();
-void setState(int);
+void nextState();
 
 void setup() {
 
@@ -44,7 +44,8 @@ void setup() {
     if (state == -1) {
         Serial.begin(9600);
     } else {
-        setState(0);
+        stateTime = millis();
+        writeState(0);
     }
 }
 
@@ -66,7 +67,7 @@ void loop() {
             writeDisplays((int) countdown);
         // go to next state on 0
         } else {
-            setState(1);
+            nextState();
         }
     // starting state
     } else if (state == 1) {
@@ -74,7 +75,7 @@ void loop() {
         writeDisplays("st");
         // don't run the rest of the code for first second or if not on full white
         if (getTime() > 1000 && (sensor(W, W, W, W, W) || sensor(W, W, B, W, W))) {
-            setState(2);
+            nextState();
         }
     // ready state
     } else if (state == 2) {
@@ -86,13 +87,13 @@ void loop() {
         // go to next state when a line is visible
         if (sensor(W, W, B, W, W) || sensor(W, B, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, B, W)) {
             stateTime = (long) millis();
-            setState(3);
+            nextState();
         }
     // driving state
     } else if (state == 3) {
         // returns true if finish is reached
         if (drive()) {
-            setState(4);
+            nextState();
         }
         writeDisplays(getTimeSec());
     // result state
@@ -111,7 +112,7 @@ void loop() {
                 delay(500);
             }
         }
-        setState(5);
+        nextState();
     // finished state
     } else if (state == 5) {
         writeDisplays("fi");
@@ -130,8 +131,8 @@ int getTimeSec() {
     return (int) (getTime() / 1000);
 }
 
-void setState(int newState) {
-    state = newState;
+void nextState() {
+    state++;
     stateTime = millis();
-    writeState(newState);
+    writeState(state);
 }
