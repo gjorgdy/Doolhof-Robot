@@ -7,6 +7,7 @@
 #include "lineSensor.h"
 #include "motorShield.h"
 #include "lineTracing.h"
+#include "pathSave.h"
 
 long countdown = 2;
 
@@ -17,6 +18,7 @@ long startTime = 0;
 bool flickering = true;
 
 int getTime();
+void setState(int);
 
 void setup() {
 
@@ -29,6 +31,26 @@ void setup() {
     if (state == -1) {
         Serial.begin(9600);
     }
+
+//    resetEEPROM();
+//    writePath("wtf");
+
+    // reset EEPROM if restarted in state 0
+    if (readState() == 0) {
+        resetEEPROM();
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                for (int j = 0; j < 50; j++) {
+                    writeDisplays("re");
+                }
+            } else {
+                emptyDisplays();
+                delay(200);
+            }
+        }
+    }
+    writeState(0);
+
 }
 
 void loop() {
@@ -36,13 +58,13 @@ void loop() {
     scan();
     // debug state
     if (state == -1) {
-        Serial.println(lastSensor(B, B, B, W, W));
-        Serial.println(sensor(W, W, B, W, W));
-        Serial.println("");
+//        Serial.println(lastSensor(B, B, B, W, W));
+//        Serial.println(sensor(W, W, B, W, W));
+        Serial.println(readPath());
         delay(1000);
     }
     // countdown state
-    if (state == 0 ) {
+    if (state == 0) {
         if (countdown != 0) {
             for (int i = 0 ; i < 250 ; i++) {
                 writeDisplays((int) countdown);
@@ -56,14 +78,14 @@ void loop() {
             startTime = (long) millis();
             goStraight();
             if (sensor(W, W, B, W, W) || sensor(W, W, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, B, W)) {
-                state = 1;
+                setState(1);
             }
         }
     // driving state
     } else if (state == 1) {
         // returns true if finish is reached
         if (drive()) {
-            state = 2;
+            setState(2);
         }
         writeDisplays(getTime());
     // finish state
@@ -95,4 +117,9 @@ void loop() {
 int getTime() {
     long timeMs = (long) millis() - startTime;
     return (int) (timeMs / 1000);
+}
+
+void setState(int newState) {
+    state = newState;
+    writeState(newState);
 }
