@@ -32,9 +32,6 @@ void setup() {
         Serial.begin(9600);
     }
 
-//    resetEEPROM();
-//    writePath("wtf");
-
     // reset EEPROM if restarted in state 0
     if (readState() == 0) {
         resetEEPROM();
@@ -58,8 +55,6 @@ void loop() {
     scan();
     // debug state
     if (state == -1) {
-//        Serial.println(lastSensor(B, B, B, W, W));
-//        Serial.println(sensor(W, W, B, W, W));
         Serial.println(readPath());
         delay(1000);
     }
