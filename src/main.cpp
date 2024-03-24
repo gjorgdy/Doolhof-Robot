@@ -9,15 +9,13 @@
 #include "lineTracing.h"
 #include "pathSave.h"
 
-long countdown = 2;
+long countdownLen = 2;
 
 int state = 0; // set to -1 for debug
+long stateTime = 0; // time spent in current state
 
-long startTime = 0;
-
-bool flickering = true;
-
-int getTime();
+long getTime();
+int getTimeSec();
 void setState(int);
 
 void setup() {
@@ -27,10 +25,6 @@ void setup() {
     enableDisplays();
     enableSensor();
     enableMotors();
-    // Countdown
-    if (state == -1) {
-        Serial.begin(9600);
-    }
 
     // reset EEPROM if restarted in state 0
     if (readState() == 0) {
@@ -46,8 +40,12 @@ void setup() {
             }
         }
     }
-    writeState(0);
-
+    // Debug logic
+    if (state == -1) {
+        Serial.begin(9600);
+    } else {
+        setState(0);
+    }
 }
 
 void loop() {
@@ -60,61 +58,80 @@ void loop() {
     }
     // countdown state
     if (state == 0) {
-        if (countdown != 0) {
-            for (int i = 0 ; i < 250 ; i++) {
-                writeDisplays((int) countdown);
-            }
-            Serial.println(countdown);
-            if (sensor(W, W, W, W, W) || sensor(W, W, B, W, W)) {
-                countdown -= 1;
-            }
+        int countdown = countdownLen - getTimeSec();
+        // debug
+        Serial.println(countdown);
+        // show number on 7-segment
+        if (countdown > 0) {
+            writeDisplays((int) countdown);
+        // go to next state on 0
         } else {
-            writeDisplays("st");
-            startTime = (long) millis();
-            goStraight();
-            if (sensor(W, W, B, W, W) || sensor(W, W, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, B, W)) {
-                setState(1);
-            }
+            setState(1);
         }
-    // driving state
+    // starting state
     } else if (state == 1) {
-        // returns true if finish is reached
-        if (drive()) {
+        // show 'st'
+        writeDisplays("st");
+        // don't run the rest of the code for first second or if not on full white
+        if (getTime() > 1000 && (sensor(W, W, W, W, W) || sensor(W, W, B, W, W))) {
             setState(2);
         }
-        writeDisplays(getTime());
-    // finish state
+    // ready state
     } else if (state == 2) {
+        resetDisplays();
+        // drive forward
+        if (sensor(W, W, W, W, W)) {
+            goStraight();
+        }
+        // go to next state when a line is visible
+        if (sensor(W, W, B, W, W) || sensor(W, B, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, B, W)) {
+            stateTime = (long) millis();
+            setState(3);
+        }
+    // driving state
+    } else if (state == 3) {
+        // returns true if finish is reached
+        if (drive()) {
+            setState(4);
+        }
+        writeDisplays(getTimeSec());
+    // result state
+    } else if (state == 4) {
         // DO NOT DRIVE
         stop();
-        // flicker
-        if (flickering) {
-            int time = getTime();
-            for (int i = 0; i < 6; i++) {
-                if (i % 2 == 0) {
-                    for (int j = 0; j < 125; j++) {
-                        writeDisplays(time);
-                    }
-                } else {
-                    emptyDisplays();
-                    delay(500);
+        // flicker time
+        int time = getTimeSec();
+        for (int i = 0; i < 6; i++) {
+            if (i % 2 == 0) {
+                for (int j = 0; j < 125; j++) {
+                    writeDisplays(time);
                 }
+            } else {
+                emptyDisplays();
+                delay(500);
             }
-            flickering = false;
-        } else {
-            writeDisplays("fi");
         }
-
+        setState(5);
+    // finished state
+    } else if (state == 5) {
+        writeDisplays("fi");
+        // dance?
+        // save path to EEPROM
+//        writePath();
     }
 
 }
 
-int getTime() {
-    long timeMs = (long) millis() - startTime;
-    return (int) (timeMs / 1000);
+long getTime() {
+    return (long) millis() - stateTime;
+}
+
+int getTimeSec() {
+    return (int) (getTime() / 1000);
 }
 
 void setState(int newState) {
     state = newState;
+    stateTime = millis();
     writeState(newState);
 }
