@@ -2,12 +2,9 @@
 // Created by Gjorg on 22/03/2024.
 //
 
-#define leftLeaning false
+bool leftLeaning = true;
 
 #include "steering.h"
-
-bool leftLeaning = true;
-bool gostraight = false;
 
 void goStraight() {
     setLeftMotor(baseSpeed, true);
@@ -15,46 +12,22 @@ void goStraight() {
 }
 
 void slightRight() {
-    setLeftMotor(baseSpeed - slightSteerDelta, true);
-    setRightMotor(baseSpeed + slightSteerDelta, true);
-}
-
-void slighterRight() {
-    setLeftMotor(baseSpeed - slighterSteerDelta, true);
-    setRightMotor(baseSpeed + slighterSteerDelta, true);
-}
-
-void slightLeft() {
     setLeftMotor(baseSpeed + slightSteerDelta, true);
     setRightMotor(baseSpeed - slightSteerDelta, true);
 }
 
-void slighterLeft() {
-    setLeftMotor(baseSpeed + slighterSteerDelta, true);
-    setRightMotor(baseSpeed - slighterSteerDelta, true);
+void slightLeft() {
+    setLeftMotor(baseSpeed - slightSteerDelta, true);
+    setRightMotor(baseSpeed + slightSteerDelta, true);
 }
 
 void turnRight() {
-    if (gostraight) {
-        goStraight();
-        gostraight = false;
-        return;
-    }
-    slightRight();
-//    setLeftMotor(baseSpeed, true); // leftleaning : true
-//    setRightMotor(baseSpeed, false); // leftleaning : true
-//    setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
-//    setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
+    setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
+    setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
+//    slightRight();
 }
 
 void turnLeft() {
-    if (gostraight) {
-        goStraight();
-        gostraight = false;
-        return;
-    }
-//    setLeftMotor(baseSpeed, false); // leftleaning : true
-//    setRightMotor(baseSpeed, true); // leftleaning : true
     setLeftMotor(baseSpeed - steerDelta, !leftLeaning); // leftleaning : false
     setRightMotor(baseSpeed + steerDelta, true); // leftleaning : true
 }
@@ -69,8 +42,16 @@ void fullOuterTurn() {
     }
 }
 
+//void fullOuterTurn() {
+//    if (leftLeaning) {
+//        modRightMotor(-1 * slightSteerDelta, true);
+//    } else {
+//        modLeftMotor(-1 * slightSteerDelta, true);
+//    }
+//}
+
 void fullTurn() {
-    if (leftLeaning || lastSensor(B, B, B, W, W)) {
+    if (leftLeaning) {
         setLeftMotor(baseSpeed, true);
         setRightMotor(baseSpeed, false);
     } else {
