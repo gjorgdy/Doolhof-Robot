@@ -13,6 +13,8 @@ long countdownLen = 2;
 
 int state = 0; // set to -1 for debug
 long stateTime = 0; // time spent in current state
+int drivingTime = 0;
+boolean saved = false;
 
 long getTime();
 int getTimeSec();
@@ -54,6 +56,7 @@ void loop() {
     scan();
     // debug state
     if (state == -1) {
+//        writePath();
         Serial.println(readPath());
         delay(1000);
     }
@@ -93,6 +96,7 @@ void loop() {
     } else if (state == 3) {
         // returns true if finish is reached
         if (drive()) {
+            drivingTime = getTimeSec();
             nextState();
         }
         writeDisplays(getTimeSec());
@@ -101,11 +105,10 @@ void loop() {
         // DO NOT DRIVE
         stop();
         // flicker time
-        int time = getTimeSec();
         for (int i = 0; i < 6; i++) {
             if (i % 2 == 0) {
                 for (int j = 0; j < 125; j++) {
-                    writeDisplays(time);
+                    writeDisplays(drivingTime);
                 }
             } else {
                 emptyDisplays();
@@ -118,7 +121,10 @@ void loop() {
         writeDisplays("fi");
         // dance?
         // save path to EEPROM
-//        writePath();
+        if (!saved) {
+            writePath();
+            saved = true;
+        }
     }
 
 }

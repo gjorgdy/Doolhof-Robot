@@ -7,9 +7,10 @@
 
 #include "lineSensor.h"
 
-#define baseSpeed 80 //120
+#define baseSpeed 100
 #define steerDelta (baseSpeed / 2)
-#define slightSteerDelta (baseSpeed / 6)
+#define slightSteerDelta 16 //(baseSpeed / 8)
+#define slighterSteerDelta (baseSpeed / 7)
 
 // motor shield
 #define dirA 12

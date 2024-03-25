@@ -18,6 +18,7 @@
 String path = "";
 
 void writePath() {
+    Serial.println("writing le path");
     String optimized = optimize(path);
     int length = optimized.length();
     EEPROM.write(1, length); // Store the string length
@@ -68,10 +69,11 @@ void replaceAll(char* str, const char* from, const char* to) {
     int start_pos = 0;
     int from_len = strlen(from);
     int to_len = strlen(to);
-    while ((start_pos = strstr(str + start_pos, from) - str) != -1) {
+    if ((start_pos = strstr(str + start_pos, from) - str) != -1) {
         memmove(str + start_pos + to_len, str + start_pos + from_len, strlen(str + start_pos + from_len) + 1);
         memcpy(str + start_pos, to, to_len);
-        start_pos += to_len; // Move past the replacement
+//        start_pos += to_len; // Move past the replacement
+//        return;
     }
 }
 

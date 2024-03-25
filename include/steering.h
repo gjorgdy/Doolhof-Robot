@@ -10,7 +10,9 @@
 void goStraight();
 void turnAround();
 void slightRight();
+void slighterRight();
 void slightLeft();
+void slighterLeft();
 void turnLeft();
 void turnRight();
 void fullTurn();

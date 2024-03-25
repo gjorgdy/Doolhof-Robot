@@ -38,11 +38,11 @@ boolean drive() {
         averagecount = 0;
     }
 
-    if (((long) millis()) - 700 > objecttime && (dist > 10 || dist == 0) ) {
+    if (((long) millis()) - 500 > objecttime && (dist > 10 || dist == 0) ) {
         objectstate = 0;
         Serial.println("state naar 0");
     }
-    if (((long) millis()) - 200 > blacktime) {
+    if (((long) millis()) - 300 > blacktime) {
         blackstate = 0;
         Serial.println("state naar 0");
     }
@@ -79,25 +79,17 @@ boolean drive() {
             blackstate = 1;
         }
         Serial.println("win? " + String(finishCount));
-        goStraight();
-//        if (finishCount == 0) {
-//        fullOuterTurn();
-//        } else
-        if (finishCount < 16) {
-//            modTurnBlack();
+        fullOuterTurn();
+
+
+        if (finishCount < 20) {
             finishCount += 1;
             return false;
         } else {
             return true;
         }
     } else if (sensor(W, W, B, W, W)) {
-        // drive code
-        Serial.println("In middle");
-        if (lastSensor(B, B, B, B, B)) {
-            fullTurn();
-        } else {
             goStraight();
-        }
     } else if (sensor(W, W, B, B, W) || sensor(W, W, W, B, W)) {
         Serial.println("slightRight");
         slightRight();

@@ -6,6 +6,9 @@
 
 #include "steering.h"
 
+bool leftLeaning = true;
+bool gostraight = false;
+
 void goStraight() {
     setLeftMotor(baseSpeed, true);
     setRightMotor(baseSpeed, true);
@@ -16,17 +19,42 @@ void slightRight() {
     setRightMotor(baseSpeed + slightSteerDelta, true);
 }
 
+void slighterRight() {
+    setLeftMotor(baseSpeed - slighterSteerDelta, true);
+    setRightMotor(baseSpeed + slighterSteerDelta, true);
+}
+
 void slightLeft() {
     setLeftMotor(baseSpeed + slightSteerDelta, true);
     setRightMotor(baseSpeed - slightSteerDelta, true);
 }
 
+void slighterLeft() {
+    setLeftMotor(baseSpeed + slighterSteerDelta, true);
+    setRightMotor(baseSpeed - slighterSteerDelta, true);
+}
+
 void turnRight() {
-    setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
-    setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
+    if (gostraight) {
+        goStraight();
+        gostraight = false;
+        return;
+    }
+    slightRight();
+//    setLeftMotor(baseSpeed, true); // leftleaning : true
+//    setRightMotor(baseSpeed, false); // leftleaning : true
+//    setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
+//    setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
 }
 
 void turnLeft() {
+    if (gostraight) {
+        goStraight();
+        gostraight = false;
+        return;
+    }
+//    setLeftMotor(baseSpeed, false); // leftleaning : true
+//    setRightMotor(baseSpeed, true); // leftleaning : true
     setLeftMotor(baseSpeed - steerDelta, !leftLeaning); // leftleaning : false
     setRightMotor(baseSpeed + steerDelta, true); // leftleaning : true
 }
