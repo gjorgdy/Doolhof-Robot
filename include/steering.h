@@ -8,15 +8,16 @@
 #include "motorShield.h"
 
 void goStraight();
-void turnAround();
-void slightRight();
-void slighterRight();
+
 void slightLeft();
-void slighterLeft();
+void slightRight();
+
 void turnLeft();
 void turnRight();
+
 void fullTurn();
 void fullOuterTurn();
+
 void stop();
 
 #endif //DOOLHOF_ROBOT_STEERING_H

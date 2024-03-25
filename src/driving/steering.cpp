@@ -22,13 +22,21 @@ void slightLeft() {
 }
 
 void turnRight() {
-    setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
-    setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
+    if (leftLeaning) {
+        goStraight();
+    } else {
+        setLeftMotor(baseSpeed + steerDelta, true);
+        setRightMotor(baseSpeed - steerDelta, false);
+    }
 }
 
 void turnLeft() {
-    setLeftMotor(baseSpeed - steerDelta, !leftLeaning); // leftleaning : false
-    setRightMotor(baseSpeed + steerDelta, true); // leftleaning : true
+    if (leftLeaning) {
+        setLeftMotor(baseSpeed - steerDelta, false);
+        setRightMotor(baseSpeed + steerDelta, true);
+    } else {
+        goStraight();
+    }
 }
 
 void fullOuterTurn() {
