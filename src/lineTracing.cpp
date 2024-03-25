@@ -38,26 +38,32 @@ boolean drive() {
     if (averagecount==5) {
         averagecount = 0;
     }
-
-    if (((long) millis()) - 700 > objecttime && (dist > 10 || dist == 0) ) {
+//&& (dist > 10 || dist == 0))
+    if (((long) millis()) - 500 > objecttime || sensor(W, W, B, W, W)) {
         objectstate = 0;
-        Serial.println("state naar 0");
-    }
-    if (((long) millis()) - 200 > blacktime) {
-        blackstate = 0;
-        Serial.println("state naar 0");
-    }
-    if (((long) millis()) - 100 > turntime) {
-        turnstate = 0;
-        Serial.println("state naar 0");
+//        Serial.println("state naar 0");
     } else return false;
+    if (((long) millis()) - 500 > blacktime || sensor(W, W, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, W, W) ||
+            sensor(W, W, W, B, W) || sensor(W, B, W, W, W)) {
+        blackstate = 0;
+//        Serial.println("state naar 0");
+    } else return false;
+    if (((long) millis()) - 300 > turntime || sensor(W, W, B, W, W) || sensor(W, W, B, B, W) || sensor(W, B, B, W, W) ||
+            sensor(W, W, W, B, W) || sensor(W, B, W, W, W)) {
+        turnstate = 0;
+//        Serial.println("state naar 0");
+    } else return false;
+//    if (sensor(W, W, B, W, W)) {
+//        objectstate = 0;
+//        blackstate = 0;
+//        turnstate = 0;
+//    }
 
     if ((dist < 7 && dist != 0) || objectstate == 1 ) {
         if (objectstate == 0 && millis() - 1000 > objecttime) {
             objecttime = millis();
             objectstate = 1;
         }
-        Serial.println("turn");
         turn();
 
     }  else if (sensor(W, W, B, B, B) || sensor(W, W, W, B, B) || sensor(W, W, W, W, B) || sensor(W, B, B, B, B) ) {
@@ -65,26 +71,20 @@ boolean drive() {
             turntime = millis();
             turnstate = 1;
         }
-        Serial.println("turnLeft");
         turnLeft();
     } else if (sensor(B, B, B, W, W) || sensor(B, B, W, W, W) || sensor(B, B, B, B, W) || sensor(B, W, W, W, W) ) {
         if (turnstate == 0) {
             turntime = millis();
             turnstate = 1;
         }
-        Serial.println("turnRight");
         turnRight();
     } else if (sensor(B, B, B, B, B) || blackstate == 1) {
         if (blackstate == 0) {
             blacktime = millis();
             blackstate = 1;
         }
-        Serial.println("win? " + String(finishCount));
-//        if (finishCount == 0) {
-            turnBlack();
-//        } else
-        if (finishCount < 16) {
-//            modTurnBlack();
+        turnBlack();
+        if (finishCount < 14) {
             finishCount += 1;
             return false;
         } else {
