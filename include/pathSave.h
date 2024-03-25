@@ -11,7 +11,7 @@
 void writePath();
 String readPath();
 
-void writeState(const int state);
+void writeState(int);
 int readState();
 
 void resetEEPROM();

@@ -5,18 +5,16 @@
 #include "NewPing.h"
 #include "lineTracing.h"
 
-static int finishCount = 0;
-
+int finishCount = 0;
 unsigned long blockTill = 0;
 
-bool isOnLine();
 void block(int ms);
 void unblock();
 bool isBlocked();
 
-NewPing sonar(2, A5, 99);
+NewPing sonar(SONAR_TRIG, SONAR_ECHO, 20);
 
-boolean drive() {
+bool drive() {
     // if robot is doing a blocking action
     if (isBlocked() && (millis() > blockTill || isOnLine())) {
         unblock();

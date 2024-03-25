@@ -4,11 +4,11 @@
 #include "lineSensor.h"
 
 void enableSensor() {
-    pinMode(sen0, INPUT_PULLUP);
-    pinMode(sen1, INPUT_PULLUP);
-    pinMode(sen2, INPUT_PULLUP);
-    pinMode(sen3, INPUT_PULLUP);
-    pinMode(sen4, INPUT_PULLUP);
+    pinMode(LINE_SENSOR_0, INPUT_PULLUP);
+    pinMode(LINE_SENSOR_1, INPUT_PULLUP);
+    pinMode(LINE_SENSOR_2, INPUT_PULLUP);
+    pinMode(LINE_SENSOR_3, INPUT_PULLUP);
+    pinMode(LINE_SENSOR_4, INPUT_PULLUP);
 }
 
 bool scans[2][5] = {
@@ -20,11 +20,11 @@ bool equal(const bool scanA[5], const bool scanB[5]);
 
 void scan() {
     bool currentScan[5];
-    currentScan[0] = digitalRead(sen0);
-    currentScan[1] = digitalRead(sen1);
-    currentScan[2] = digitalRead(sen2);
-    currentScan[3] = digitalRead(sen3);
-    currentScan[4] = digitalRead(sen4);
+    currentScan[0] = digitalRead(LINE_SENSOR_0);
+    currentScan[1] = digitalRead(LINE_SENSOR_1);
+    currentScan[2] = digitalRead(LINE_SENSOR_2);
+    currentScan[3] = digitalRead(LINE_SENSOR_3);
+    currentScan[4] = digitalRead(LINE_SENSOR_4);
 
 //    for (bool i : currentScan) {
 //        Serial.print(i);

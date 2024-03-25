@@ -6,7 +6,9 @@
 #define DOOLHOF_ROBOT_LINETRACING_H
 
 #include "steering.h"
+#include "lineSensor.h"
 
-boolean drive();
+bool drive();
+bool isOnLine();
 
 #endif //DOOLHOF_ROBOT_LINETRACING_H

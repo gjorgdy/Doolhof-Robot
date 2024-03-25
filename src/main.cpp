@@ -3,18 +3,18 @@
 //
 
 //#include <Arduino.h>
-#include "SegmentDisplays.h"
+#include "displays.h"
 #include "lineSensor.h"
 #include "motorShield.h"
 #include "lineTracing.h"
 #include "pathSave.h"
 
-long countdownLen = 2;
+int countdownLen = 2;
 
 int state = 0; // set to -1 for debug
-unsigned long stateTime = 0; // time spent in current state
-int drivingTime = 0;
-boolean saved = false;
+unsigned long stateTime = 0; // time spent in current state in milliseconds
+int drivingTime = 0; // time spent driving in seconds
+boolean saved = false; // if current path has been written to EEPROM
 
 unsigned long getTime();
 int getTimeSec();

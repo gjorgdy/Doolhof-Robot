@@ -14,15 +14,15 @@ boolean rightForward = true;
  * Open pins of motorshield
  */
 void enableMotors() {
-    pinMode(dirA, OUTPUT);
-    pinMode(dirB, OUTPUT);
-    pinMode(pwmA, OUTPUT);
-    pinMode(pwmB, OUTPUT);
+    pinMode(MOTOR_DIRECTION_A, OUTPUT);
+    pinMode(MOTOR_DIRECTION_B, OUTPUT);
+    pinMode(MOTOR_PWM_A, OUTPUT);
+    pinMode(MOTOR_PWM_B, OUTPUT);
 }
 
 void setLeftMotor(int speed, bool forward) {
-    analogWrite(pwmB, speed);
-    digitalWrite(dirB, forward ? HIGH : LOW);
+    analogWrite(MOTOR_PWM_B, speed);
+    digitalWrite(MOTOR_DIRECTION_B, forward ? HIGH : LOW);
     leftSpeed = speed;
     leftForward = forward;
 }
@@ -32,8 +32,8 @@ void modLeftMotor(int modSpeed, bool forward) {
 }
 
 void setRightMotor(int speed, bool forward) {
-    analogWrite(pwmA, speed);
-    digitalWrite(dirA, forward ? LOW : HIGH);
+    analogWrite(MOTOR_PWM_A, speed);
+    digitalWrite(MOTOR_DIRECTION_A, forward ? LOW : HIGH);
     rightSpeed = speed;
     rightForward = forward;
 }
