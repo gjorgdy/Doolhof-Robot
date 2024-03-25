@@ -24,7 +24,6 @@ void slightLeft() {
 void turnRight() {
     setLeftMotor(baseSpeed + steerDelta, true); // leftleaning : true
     setRightMotor(baseSpeed - steerDelta, leftLeaning); // leftleaning : true
-//    slightRight();
 }
 
 void turnLeft() {
@@ -41,14 +40,6 @@ void fullOuterTurn() {
         setRightMotor(0, false);
     }
 }
-
-//void fullOuterTurn() {
-//    if (leftLeaning) {
-//        modRightMotor(-1 * slightSteerDelta, true);
-//    } else {
-//        modLeftMotor(-1 * slightSteerDelta, true);
-//    }
-//}
 
 void fullTurn() {
     if (leftLeaning) {

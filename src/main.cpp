@@ -12,11 +12,11 @@
 long countdownLen = 2;
 
 int state = 0; // set to -1 for debug
-long stateTime = 0; // time spent in current state
+unsigned long stateTime = 0; // time spent in current state
 int drivingTime = 0;
 boolean saved = false;
 
-long getTime();
+unsigned long getTime();
 int getTimeSec();
 void nextState();
 
@@ -129,8 +129,8 @@ void loop() {
 
 }
 
-long getTime() {
-    return (long) millis() - stateTime;
+unsigned long getTime() {
+    return (unsigned long) millis() - stateTime;
 }
 
 int getTimeSec() {
