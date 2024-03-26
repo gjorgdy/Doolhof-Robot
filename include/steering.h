@@ -6,6 +6,7 @@
 #define DOOLHOF_ROBOT_STEERING_H
 
 #include "motorShield.h"
+bool isLeftLeaning();
 
 void goStraight();
 

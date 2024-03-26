@@ -1,8 +1,9 @@
-//
+ //
 // Created by Gjorg on 24/03/2024.
 //
 
 #include "pathSave.h"
+#include "steering.h"
 
 // Path values;
 //  L - Go left
@@ -79,6 +80,13 @@ String optimize(String in) {
     replace(in.begin(), " ", "");
     while (in.indexOf('T') != -1) {
         Serial.println(in);
+        replace(in.begin(), "WW", "T");
+        if (isLeftLeaning()) {
+            replace(in.begin(), "WW", "R");
+        } else {
+            replace(in.begin(), "WW", "L");
+        }
+        replace(in.begin(), "W", "L");
         replace(in.begin(), "LTL", "S");
         replace(in.begin(), "RTL", "T");
         replace(in.begin(), "STS", "T");

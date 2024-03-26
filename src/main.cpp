@@ -23,6 +23,7 @@ void nextState();
 void setup() {
 
     TCCR2B = TCCR2B & (B11111000 | B00000111); // for PWM frequency of 30.64 Hz
+//    TCCR2B = TCCR2B & (B11111000 | B00000110); // for PWM frequency of 122.55 Hz
 
     enableDisplays();
     enableSensor();
@@ -56,8 +57,6 @@ void loop() {
     scan();
     // debug state
     if (state == -1) {
-//        writePath();
-//        goStraight();
         Serial.println(readPath());
         delay(1000);
     }

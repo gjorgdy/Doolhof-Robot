@@ -7,9 +7,9 @@
 
 #include "pins.h"
 
-#define baseSpeed 100
-#define straightSpeed 120
-#define steerDelta 50
+#define baseSpeed 80
+#define straightSpeed 100
+#define steerDelta 30
 #define slightSteerDelta 15
 
 void setLeftMotor(int speed, bool forward);

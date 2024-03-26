@@ -7,6 +7,7 @@
 #include "pathSave.h"
 
 int finishCount = 0;
+int whiteCount = 0;
 unsigned long blockTill = 0;
 unsigned long blockTillAtLeast = 0;
 
@@ -72,19 +73,22 @@ bool drive() {
         }
         turnRight();
     // if sensors see a turn to the left
-    } else if (sensor(B, B, B, B, W) || sensor(B, B, B, W, W)) {
-        block(500);
+    } else if (sensor(B, B, B, B, W) || sensor(B, B, B, W, W) || sensor(B, B, W, W, W)) {
+        if (isLeftLeaning()) {
+            block(100, 500);
+            addAction('L');
+        } else {
+            addAction('S');
+        }
         turnLeft();
     // if sensors see only black
     } else if (sensor(B, B, B, B, B)) {
         block(200, 700);
         fullOuterTurn();
-        // count amount of ticks on finish
-        if (finishCount < 15) {
-            finishCount += 1;
-            return false;
+        if (isLeftLeaning()) {
+            addAction('L');
         } else {
-            return true;
+            addAction('R');
         }
     // if sensors see a line in the middle
     } else if (sensor(W, W, B, W, W)) {
@@ -96,7 +100,7 @@ bool drive() {
     } else if (sensor(W, B, B, W, W) || sensor(W, B, W, W, W) || sensor(B, W, W, W, W)) {
         slightLeft();
     }
-    finishCount = 0;
+    if(!sensor(W, W, W, W, W)) whiteCount = 0;
     return false;
 }
 

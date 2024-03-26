@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "motorShield.h"
 #include "lineSensor.h"
+#include "steering.h"
 
 int leftSpeed = 0;
 boolean leftForward = true;
