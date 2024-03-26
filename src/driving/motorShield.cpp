@@ -33,7 +33,7 @@ void modLeftMotor(int modSpeed, bool forward) {
 
 void setRightMotor(int speed, bool forward) {
     analogWrite(MOTOR_PWM_A, speed);
-    digitalWrite(MOTOR_DIRECTION_A, forward ? LOW : HIGH);
+    digitalWrite(MOTOR_DIRECTION_A, forward ? HIGH : LOW);
     rightSpeed = speed;
     rightForward = forward;
 }

@@ -7,8 +7,8 @@ bool leftLeaning = true;
 #include "steering.h"
 
 void goStraight() {
-    setLeftMotor(baseSpeed, true);
-    setRightMotor(baseSpeed, true);
+    setLeftMotor(straightSpeed, true);
+    setRightMotor(straightSpeed, true);
 }
 
 void slightRight() {
@@ -30,6 +30,15 @@ void turnRight() {
     }
 }
 
+void tightTurnLeft() {
+    if (leftLeaning) {
+        setLeftMotor(baseSpeed, false);
+        setRightMotor(baseSpeed, true);
+    } else {
+        goStraight();
+    }
+}
+
 void turnLeft() {
     if (leftLeaning) {
         setLeftMotor(baseSpeed - steerDelta, false);
@@ -41,11 +50,11 @@ void turnLeft() {
 
 void fullOuterTurn() {
     if (leftLeaning) {
-        setLeftMotor(0, false);
-        setRightMotor(baseSpeed, true);
+        setLeftMotor(slightSteerDelta, true);
+        setRightMotor(baseSpeed - slightSteerDelta, true);
     } else {
-        setLeftMotor(baseSpeed, true);
-        setRightMotor(0, false);
+        setLeftMotor(baseSpeed - slightSteerDelta, true);
+        setRightMotor(slightSteerDelta, true);
     }
 }
 
@@ -62,4 +71,13 @@ void fullTurn() {
 void stop() {
     setLeftMotor(0, true);
     setRightMotor(0, true);
+}
+
+void reverse() {
+    setLeftMotor(baseSpeed, false);
+    setRightMotor(baseSpeed, false);
+}
+
+bool isLeftLeaning () {
+    return leftLeaning;
 }

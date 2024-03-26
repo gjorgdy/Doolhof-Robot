@@ -13,11 +13,13 @@ void slightLeft();
 void slightRight();
 
 void turnLeft();
+void tightTurnLeft();
 void turnRight();
 
 void fullTurn();
 void fullOuterTurn();
 
 void stop();
+void reverse();
 
 #endif //DOOLHOF_ROBOT_STEERING_H

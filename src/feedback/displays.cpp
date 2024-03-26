@@ -46,7 +46,7 @@ void selectDisplay(int display) {
  */
 void writeDisplays(int number) {
     // Frame rate of 1000/5 = 200hz
-    delay(2);
+    delay(1);
     // Select first display
     selectDisplay(0);
     // Calculate first digit
@@ -59,7 +59,7 @@ void writeDisplays(int number) {
         writeDisplay(dec);
     }
     // Frame rate of 1000/5 = 200hz
-    delay(2);
+    delay(1);
     // Select second display
     selectDisplay(1);
     // Print second digit
@@ -68,13 +68,13 @@ void writeDisplays(int number) {
 
 void writeDisplays(const String& string) {
     // Frame rate of 1000/5 = 200hz
-    delay(5);
+    delay(1);
     // Select first display
     selectDisplay(0);
     // Print first character
     writeDisplay(string.charAt(0));
     // Frame rate of 1000/5 = 200hz
-    delay(5);
+    delay(1);
     // Select second display
     selectDisplay(1);
     // Print second character

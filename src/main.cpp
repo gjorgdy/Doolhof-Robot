@@ -9,7 +9,7 @@
 #include "lineTracing.h"
 #include "pathSave.h"
 
-int countdownLen = 2;
+int countdownLen = 10;
 
 int state = 0; // set to -1 for debug
 unsigned long stateTime = 0; // time spent in current state in milliseconds
@@ -57,6 +57,7 @@ void loop() {
     // debug state
     if (state == -1) {
 //        writePath();
+//        goStraight();
         Serial.println(readPath());
         delay(1000);
     }
@@ -99,6 +100,7 @@ void loop() {
             drivingTime = getTimeSec();
             nextState();
         }
+//        delay(4);
         writeDisplays(getTimeSec());
     // result state
     } else if (state == 4) {

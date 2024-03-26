@@ -14,6 +14,8 @@ String readPath();
 void writeState(int);
 int readState();
 
+void addAction(char);
+
 void resetEEPROM();
 
 String optimize(String in);
